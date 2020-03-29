@@ -1,4 +1,5 @@
 package beresheet;
+
 /**
  * 
  * @author Rachel
@@ -48,7 +49,7 @@ public class Spacecraft {
 
 
 	// Main function to start the landing stage
-	public void landManeuver() {
+	public void landManeuver(){
 
 		printHead();
 		printState();
@@ -236,12 +237,29 @@ public class Spacecraft {
 	}
 
 
-	private void printHead() {
+	private void printHead(){
 		System.out.println( "Time\tAlt\t\tV-Speed\t\tV-Acc\t\tH-Speed\t\tH-Acc\t\tFuel\tWeight\tAngle\tA-Speed\tA-Acc" );
+		CsvWriter.write( "Time,Alt,V-Speed,V-Acc,H-Speed,H-Acc,Fuel,Weight,Angle,A-Speed,A-Acc");
 	}
 
-	private void printState() {
+	private void printState(){
+
 		System.out.println( this.toString() );
+		String s= String.format( "%4ds,%9.2f,%5.2fm/s,%5.2fm/s²,%7.2fm/s,%5.2fm/s²,%.2f,%.2f,%5.2f°,%5.2f,%6.3f",
+				time,
+				altitude,
+				vSpeed,
+				accY,
+				hSpeed,
+				accX,
+				fuel,
+				getTotalWeight(),
+				angle,
+				angSpeed,
+				angAcc
+				);
+		CsvWriter.write(s);
+
 	}
 
 	private void printSuccess() {

@@ -1,4 +1,5 @@
 package beresheet;
+
 /**
  * 
  * @author Rachel
@@ -22,6 +23,6 @@ public class Moon {
 	public static double getGravityForce( double mass, double height ) {
 		return -Physics.getGravityForce( mass, MASS, RADIUS + height );
 	}
-	
+
 }
 
