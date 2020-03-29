@@ -1,4 +1,4 @@
-package beresheet2;
+package beresheet;
 /**
  * 
  * @author Rachel
@@ -7,7 +7,7 @@ package beresheet2;
 public class Spacecraft {
 
 	// Constants
-	public static final int    TIMEOUT            = 1;     // ms
+	public static final long   TIMEOUT            = 1;     // ms
 
 	public static final double SELF_WEIGHT        = 165;   // kg
 	public static final double SELF_RADIUS        = 0.925; // M
@@ -36,15 +36,16 @@ public class Spacecraft {
 
 	// Variables
 	private int    time      = 0;
-	private double altitude  = 30000;
+	private double altitude  = 30000; 
 	private double fuel      = 420 / 2;
-	private double vSpeed    = 0;
+	private double vSpeed    = -24.8;
 	private double hSpeed    = 1700;
 	private double accX      = 0;
 	private double accY      = 0;
 	private double angle     = 90;
 	private double angSpeed  = 0;
 	private double angAcc    = 0;
+
 
 	// Main function to start the landing stage
 	public void landManeuver() {
@@ -57,13 +58,14 @@ public class Spacecraft {
 
 			try {
 				Thread.sleep( TIMEOUT );
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+
 			time += dt; // 1sec per loop
 
-			if( time % 5 == 0 ) {
+			if( time % 10 == 0 ) {
 				printState();
 			}
 
@@ -88,7 +90,7 @@ public class Spacecraft {
 		if ( this.altitude < 0 ) {
 			// We've reached the surface
 
-			if ( this.vSpeed < -5 ) {
+			if ( this.vSpeed < -10 || this.hSpeed > 10  ) {
 				// Speed too high
 				printError( ERR_TYPES.CRASH_SPEED );
 				return;
@@ -166,7 +168,7 @@ public class Spacecraft {
 		this.accX -= getTotalEngineThrust();
 	}
 
-	// Calculate vertical acceleration (upwards)
+	// Calculate vertical acceleration (/)
 	private void thrustVertically() {
 		this.accY += getTotalEngineThrust();
 	}
@@ -175,11 +177,15 @@ public class Spacecraft {
 	private void activateEngines() {
 
 		// Thrust Horizontally to get to Moon orbit speed
-		if ( this.hSpeed > Moon.ORBIT_SPEED )
+		if ( this.hSpeed > 0 )
 			thrustHorizontally();
 
 		// Thrust Vertically to slow down
-		if ( this.altitude > 10000 ) {
+		if ( this.altitude > 20000 ) {
+			if ( this.vSpeed < -25 )
+				thrustVertically();
+
+		} else if ( this.altitude > 10000 ) {
 
 			if ( this.vSpeed < -100 )
 				thrustVertically();
@@ -194,14 +200,14 @@ public class Spacecraft {
 			if ( this.vSpeed < -10 )
 				thrustVertically();
 
-		} else {
+		} else if ( this.altitude > 5 )  {
 
 			if ( this.vSpeed < -5 )
 				thrustVertically();
 
 		}
 
-	}
+	}	
 
 	// Update remaining fuel
 	private void updateFuel() {
@@ -276,9 +282,7 @@ public class Spacecraft {
 				angle,
 				angSpeed,
 				angAcc
-			);
+				);
 	}
-
-
 }
 

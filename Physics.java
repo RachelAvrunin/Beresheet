@@ -1,4 +1,4 @@
-package beresheet2;
+package beresheet;
 /**
  * 
  * @author Rachel
